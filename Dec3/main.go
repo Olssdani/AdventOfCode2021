@@ -56,12 +56,9 @@ func main() {
 	}
 
 	// A
-
 	// Size of string = number of bits
 	nrBits := len([]rune(lines[0]))
 	dataLength := len(lines)
-
-	fmt.Println("Size", nrBits)
 
 	// Intial slice with values 0
 	sum := make([]int, nrBits)
@@ -87,49 +84,56 @@ func main() {
 	fmt.Println("Gamma rate:", gamma, "Epsilon Rate", epsilon, "Power", epsilon*gamma)
 
 	// B
-	linesVector := make([]string, len(lines))
-	copy(linesVector, lines)
-	bitNumber := 0
-	for len(linesVector) > 1 {
-		index := 0
-		compare, sum := getMostCommonBit(linesVector, bitNumber)
-		for len(linesVector) > sum {
-			v, _ := strconv.Atoi(string(linesVector[index][bitNumber]))
-			if v != compare {
-				linesVector = remove(linesVector, index)
-			} else {
-				index++
+	var oxygen uint = 0
+	var co2 uint = 0
+
+	{
+		linesVector := make([]string, len(lines))
+		copy(linesVector, lines)
+		bitNumber := 0
+		for len(linesVector) > 1 {
+			index := 0
+			compare, sum := getMostCommonBit(linesVector, bitNumber)
+			for len(linesVector) > sum {
+				v, _ := strconv.Atoi(string(linesVector[index][bitNumber]))
+				if v != compare {
+					linesVector = remove(linesVector, index)
+				} else {
+					index++
+				}
 			}
+			bitNumber++
 		}
-		bitNumber++
+		oxygen = bitsToUint(linesVector[0], nrBits)
 	}
-	oxygen := linesVector[0]
 
-	linesVecto := make([]string, len(lines))
-	copy(linesVecto, lines)
-	bitNumber = 0
+	{
+		linesVector := make([]string, len(lines))
+		copy(linesVector, lines)
+		bitNumber := 0
 
-	for len(linesVecto) > 1 {
-		index := 0
-		compare, sum := getMostCommonBit(linesVecto, bitNumber)
-		sum = len(linesVecto) - sum
-		if compare > 0 {
-			compare = 0
-		} else {
-			compare = 1
-		}
-
-		for len(linesVecto) > sum {
-			v, _ := strconv.Atoi(string(linesVecto[index][bitNumber]))
-			if v != compare {
-				linesVecto = remove(linesVecto, index)
+		for len(linesVector) > 1 {
+			index := 0
+			compare, sum := getMostCommonBit(linesVector, bitNumber)
+			sum = len(linesVector) - sum
+			if compare > 0 {
+				compare = 0
 			} else {
-				index++
+				compare = 1
 			}
-		}
-		bitNumber++
-	}
-	co2 := linesVecto[0]
 
-	fmt.Println("Oxygen", bitsToUint(oxygen, nrBits), "co2", bitsToUint(co2, nrBits))
+			for len(linesVector) > sum {
+				v, _ := strconv.Atoi(string(linesVector[index][bitNumber]))
+				if v != compare {
+					linesVector = remove(linesVector, index)
+				} else {
+					index++
+				}
+			}
+			bitNumber++
+		}
+		co2 = bitsToUint(linesVector[0], nrBits)
+	}
+
+	fmt.Println("Oxygen", oxygen, "co2", co2, "Answer", co2*oxygen)
 }
